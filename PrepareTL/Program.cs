@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace PrepareTL
 {
@@ -10,6 +11,7 @@ namespace PrepareTL
         
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
             string WorkFolder = "abdata";
             Console.WriteLine("Making Master Files...");
 
@@ -17,10 +19,10 @@ namespace PrepareTL
 
             Console.Clear();
 
-            Console.WriteLine("Please write the characternumber you'd like to run.");
-            string chara = Console.ReadLine();
+            //Console.WriteLine("Please write the characternumber you'd like to run.");
+            //string chara = Console.ReadLine();
 
-            MakeNewDirs(chara, WorkFolder);
+            MakeNewDirs("c30", WorkFolder);
         }
 
         public static void MakeMasters(string WorkFolder)
@@ -109,6 +111,7 @@ namespace PrepareTL
 
         public static void MakeNewDirs(string characterarchetype, string WorkFolder)
         {
+            string WriteLine = "humbug";
             foreach (string HTransFile in Directory.EnumerateFiles(WorkFolder, "*.txt", SearchOption.AllDirectories))
             {
                 string[] HTranslationFiles = File.ReadAllLines(HTransFile); // Filename obtained
@@ -125,16 +128,19 @@ namespace PrepareTL
                 foreach(string line in HTranslationFiles)
                 {
                     string[] lineSplit = line.Split('=');
-                    string WriteLine = "humbug";
                     foreach(string MasterLine in masterlines)
                     {
                         string[] mineSplit = MasterLine.Split('=');
-                        if(mineSplit[1] == lineSplit[0])
+                        //Console.WriteLine(mineSplit[1]);
+                        //Console.WriteLine(lineSplit[0]);
+                        if (mineSplit[1].Replace(@"/", "") == lineSplit[0].Replace(@"/", ""))
                         {
-                            WriteLine = mineSplit[0] + line;
+                            WriteLine = mineSplit[0] + "=" + line;
+                            file.WriteLine(WriteLine);
                         }
+                        Console.WriteLine("ping");
                     }
-                    file.WriteLine(WriteLine);
+                    //Console.WriteLine(WriteLine);
                 }
 
                 file.Close();
